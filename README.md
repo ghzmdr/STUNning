@@ -2,7 +2,7 @@
 A STUN server to enable direct client-server communication over NAT
 
 ##Usage:
-    clone this repo then
+clone this repo then
 
     var stunning = require('./stunning')
     var server = stunning() //default configuration
