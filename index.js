@@ -21,7 +21,6 @@ STUN.prototype.init = function() {
         dns.lookup(this.config.address, function resolved(err, addresses){
             if (err) throw err
             console.log(_this.config.address + ' RESOLVED TO: ' + addresses)
-            console.log("SOCKET" , _this.socket)
             _this.socket.bind(this.config.port, addresses)
         })
     }
@@ -44,8 +43,8 @@ STUN.prototype.init = function() {
 
 STUN.prototype.handleMessage = function(message, request) {
     if (message == OP_CODES.REGISTER_SERVER)
-        registerServer(request)
-    else addClient(request)
+        this.registerServer(request)
+    else this.addClient(request)
 }
 
 STUN.prototype.registerServer = function(info) {
