@@ -36,7 +36,7 @@ STUN.prototype.init = function() {
         console.log('Listening on : ' + address.address + ':' + address.port)
     })
     
-    this.socket.on('message', this.handleMessage)
+    this.socket.on('message', this.handleMessage.bind(this))
 
     setTimeout(this.keepAlive, this.config.keepAliveTimer)
 }
