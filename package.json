@@ -1,18 +1,15 @@
 {
-  "name": "stun-roll",
+  "name": "stunning",
   "version": "1.0.0",
-  "description": "Stun server to evade UDP requests under mobile data network",
+  "description": "A STUN server to enable direct client-server communication over NAT",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://git.heroku.com/stun-roll.git"
+    "url": "https://github.com/ghzmdr/stunning"
   },
   "author": "Vincent De Feo (ghzmdr)",
-  "license": "MIT"/*,
-  "dependencies": {
-    "keypress": "^0.2.1"
-  }*/
+  "license": "Unlicense (http://unlicense.org/)"
 }
