@@ -7,7 +7,7 @@ function Endpoint(address, port){
 }
 
 Endpoint.prototype.toString = function() {
-    return '=== ENDPOINT ===\n==ADDRESS: ' + this.address + '\n==PORT: ' + this.port
+    return '\n\=== ENDPOINT ===\n==ADDRESS: ' + this.address + '\n==PORT: ' + this.port
 }
 
 Endpoint.prototype.send = function(socket, string) {
