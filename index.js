@@ -2,7 +2,8 @@ var Endpoint = require('./Endpoint'),
     OP_CODES = require('./OpCodes')
 
 function stunning(config) {        
-    this.config  = config || require('./config')
+    this.config  = require('./config-validator')(require('./config'), config)
+    console.log(this.config)    
     this.socket = require('dgram').createSocket('udp4')    
     this.server = null
     this.clients = null    
