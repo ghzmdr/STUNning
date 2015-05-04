@@ -1,8 +1,8 @@
 config = {
-    address: 'vincentdefeo.me',
-    port: '4444',
-    resolveDNS: true,
-    keepAliveTimer: 40
+    address: '127.0.0.1',
+    port: '7999',
+    resolveDNS: false,
+    keepAliveTimer: 400
 }
 
 module.exports = config
