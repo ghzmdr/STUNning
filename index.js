@@ -68,7 +68,7 @@ STUN.prototype.addClient = function(info) {
     console.log('GOT CLIENT\n', c.toString())
 
     /** SEND SERVER INFO TO NEW CLIENT **/
-    c.send(this.socket, this.server ? JSON.stringify(server) : OP_CODES.SERVER_NOT_CONNECTED)    
+    c.send(this.socket, this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED)    
 
     /** SEND NEW CLIENT INFO TO SERVER **/    
     if (this.server) this.server.send(JSON.stringify(c))
