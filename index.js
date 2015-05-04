@@ -71,8 +71,7 @@ STUN.prototype.addClient = function(info) {
     c.send(this.socket, this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED)    
 
     /** SEND NEW CLIENT INFO TO SERVER **/    
-    var clientInfo = JSON.stringify(c)
-    if (this.server) this.server.send(clientInfo)
+    if (this.server) this.server.send(socket, JSON.stringify(c))
 }
 
 STUN.prototype.keepAlive = function() {
