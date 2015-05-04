@@ -1,7 +1,7 @@
 var Endpoint = require('./Endpoint'),
     OP_CODES = require('./OpCodes')
 
-function STUN(config) {        
+function stunning(config) {        
     this.config  = config || require('./config')
     this.socket = require('dgram').createSocket('udp4')    
     this.server = null
@@ -9,7 +9,7 @@ function STUN(config) {
     this.init()    
 }
 
-STUN.prototype.init = function() {
+stunning.prototype.init = function() {
 
     var dns = require('dns')                
     var _this = this
@@ -41,13 +41,13 @@ STUN.prototype.init = function() {
     setTimeout(this.keepAlive, this.config.keepAliveTimer)
 }
 
-STUN.prototype.handleMessage = function(message, request) {
+stunning.prototype.handleMessage = function(message, request) {
     if (message == OP_CODES.REGISTER_SERVER)
         this.registerServer(request)
     else this.addClient(request)
 }
 
-STUN.prototype.registerServer = function(info) {
+stunning.prototype.registerServer = function(info) {
     /** REGISTER SERVER **/
     if (!this.server) {
         this.server = new Endpoint(info.address, info.port)
@@ -59,7 +59,7 @@ STUN.prototype.registerServer = function(info) {
     }
 }
 
-STUN.prototype.addClient = function(info) {
+stunning.prototype.addClient = function(info) {
     if (!this.clients) this.clients = []        
 
     /** REGISTER NEW CLIENT */
@@ -74,7 +74,7 @@ STUN.prototype.addClient = function(info) {
     if (this.server) this.server.send(this.socket, JSON.stringify(c))
 }
 
-STUN.prototype.keepAlive = function() {
+stunning.prototype.keepAlive = function() {
     if (this.server){
         this.server.send(this.socket, OP_CODES.KEEP_ALIVE)
         this.server.lastSeen = Date.now()
@@ -89,4 +89,4 @@ STUN.prototype.keepAlive = function() {
     setTimeout(this.keepAlive, this.keepAliveTimer)
 }
 
-module.exports = STUN
+module.exports = stunning
