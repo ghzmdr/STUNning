@@ -12,12 +12,12 @@ function STUN(config) {
 STUN.prototype.init = function() {
 
     var dns = require('dns')                
+    var _this = this
 
     console.log('\nSTARTING...\n')
     
     /** RESOLVE DNS AND BIND **/
     if (this.config.resolveDNS){
-        var _this = this
         dns.lookup(this.config.address, function resolved(err, addresses){
             if (err) throw err
             console.log(_this.config.address + ' RESOLVED TO: ' + addresses)
@@ -33,7 +33,7 @@ STUN.prototype.init = function() {
     })
 
     this.socket.on('listening', function(){
-        var address = this.socket.address()
+        var address = _this.socket.address()
         console.log('Listening on : ' + address.address + ':' + address.port)
     })
     
