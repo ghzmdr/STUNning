@@ -17,7 +17,7 @@ You can provide these settings: (defaults shown in _italics_)
   
   __resolveDNS__: if the __address__ field should be resolved - _true_
   
-  __keepAliveTimeout__: time between each keepalive packet - _400_ (milliseconds)
+  __keepAliveTime__: time between each keepalive packet - _400_ (milliseconds)
             
 
 

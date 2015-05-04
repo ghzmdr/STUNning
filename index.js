@@ -21,7 +21,7 @@ stunning.prototype.init = function() {
         dns.lookup(this.config.address, function resolved(err, addresses){
             if (err) throw err
             console.log(_this.config.address + ' RESOLVED TO: ' + addresses)
-            _this.socket.bind(this.config.port, addresses)
+            _this.socket.bind(_this.config.port, addresses)
         })
     }
     /**  OR JUST BIND **/    
