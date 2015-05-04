@@ -1,0 +1,18 @@
+{
+  "name": "stun-roll",
+  "version": "1.0.0",
+  "description": "Stun server to evade UDP requests under mobile data network",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.heroku.com/stun-roll.git"
+  },
+  "author": "Vincent De Feo (ghzmdr)",
+  "license": "MIT"/*,
+  "dependencies": {
+    "keypress": "^0.2.1"
+  }*/
+}
