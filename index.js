@@ -51,8 +51,8 @@ STUN.prototype.registerServer = function(info) {
     /** REGISTER SERVER **/
     if (!this.server) {
         this.server = new Endpoint(info.address, info.port)
-        console.log('GOT SERVER', this.server.toString())
-        this.server.send(this.socket, clients ? JSON.stringify(clients) : OP_CODES.NO_CLIENTS_CONNECTED)
+        console.log('GOT SERVER\n', this.server.toString())
+        this.server.send(this.socket, this.clients ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
     } else {
         var resp = new Buffer(OP_CODES.SERVER_ALREADY_REGISTERED)
         this.socket.send(resp, 0, resp.length, info.port, info.address)    
