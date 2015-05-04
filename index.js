@@ -90,5 +90,3 @@ STUN.prototype.keepAlive = function() {
 }
 
 module.exports = STUN
-
-var stun = new STUN()
