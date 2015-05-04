@@ -60,11 +60,11 @@ STUN.prototype.registerServer = function(info) {
 }
 
 STUN.prototype.addClient = function(info) {
-    if (!clients) clients = []        
+    if (!this.clients) this.clients = []        
 
     /** REGISTER NEW CLIENT */
     var c = new Endpoint(info.address, info.port)    
-    clients.push(c)    
+    this.clients.push(c)    
     console.log('GOT CLIENT', c)
 
     /** SEND SERVER INFO TO NEW CLIENT **/
