@@ -2,10 +2,10 @@
 A STUN server to enable direct client-server communication over NAT
 
 ##Usage:
+    clone this repo then
 
-    npm install stunning
-    var stunning = require('stunning')
-    var server = stunning()
+    var stunning = require('./stunning')
+    var server = stunning() //default configuration
     
 ### Configuration
 
