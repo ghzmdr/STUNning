@@ -2,28 +2,32 @@ var Endpoint = require('./Endpoint'),
     OP_CODES = require('./OpCodes')
 
 function stunning(config) {        
+    /** PARSE CONFIG **/
     this.config  = require('./config-validator')(require('./config'), config)
+
     this.socket = require('dgram').createSocket('udp4')    
+
     this.server = null
-    this.clients = null    
-    this.init()    
+    this.clients = []        
 }
 
-stunning.prototype.init = function() {
-
-    var dns = require('dns')                
-    var _this = this
+stunning.prototype.connect = function() {
 
     console.log('\nSTARTING...\n')
     
     /** RESOLVE DNS AND BIND **/
     if (this.config.resolveDNS){
+        var dns = require('dns')                
+
         dns.lookup(this.config.address, function resolved(err, addresses){
             if (err) throw err
-            console.log(_this.config.address + ' RESOLVED TO: ' + addresses)
-            _this.socket.bind(_this.config.port, addresses)
-        })
+
+            console.log(this.config.address + ' RESOLVED TO: ' + addresses)
+            this.socket.bind(this.config.port, addresses)
+
+        }.bind(this))
     }
+
     /**  OR JUST BIND **/    
     else this.socket.bind(this.config.port, this.config.address)
 
@@ -32,9 +36,9 @@ stunning.prototype.init = function() {
     })
 
     this.socket.on('listening', function(){
-        var address = _this.socket.address()
+        var address = this.socket.address()
         console.log('Listening on : ' + address.address + ':' + address.port)
-    })
+    }.bind(this))
     
     this.socket.on('message', this.handleMessage.bind(this))
 
@@ -42,9 +46,11 @@ stunning.prototype.init = function() {
 }
 
 stunning.prototype.handleMessage = function(message, request) {
-    if (message == OP_CODES.REGISTER_SERVER)
+     if (message == OP_CODES.REGISTER_SERVER) {
         this.registerServer(request)
-    else this.addClient(request)
+    } else if (message == OP_CODES.REGISTER_CLIENT) {
+        this.registerClient(request)
+    }
 }
 
 stunning.prototype.registerServer = function(info) {
@@ -53,6 +59,11 @@ stunning.prototype.registerServer = function(info) {
         this.server = new Endpoint(info.address, info.port)
         console.log('\n\nGOT SERVER\n', this.server.toString())
         this.server.send(this.socket, this.clients ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
+        
+        for (var i = clients.length - 1; i >= 0; i--) {
+            clients[i].send(this.socket, JSON.stringify(this.server))
+        }
+
     } else {
         var resp = new Buffer(OP_CODES.SERVER_ALREADY_REGISTERED)
         this.socket.send(resp, 0, resp.length, info.port, info.address)    
@@ -60,12 +71,11 @@ stunning.prototype.registerServer = function(info) {
 }
 
 stunning.prototype.addClient = function(info) {
-    if (!this.clients) this.clients = []        
-
+         
     /** REGISTER NEW CLIENT */
-    var c = new Endpoint(info.address, info.port)    
-    this.clients.push(c)    
-    console.log('\n\nGOT CLIENT\n', c.toString())
+    var client = new Endpoint(info.address, info.port)    
+    this.clients.push(client)    
+    console.log('\n\nGOT CLIENT\n', client.toString())
 
     /** SEND SERVER INFO TO NEW CLIENT **/
     c.send(this.socket, this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED)    
@@ -74,19 +84,21 @@ stunning.prototype.addClient = function(info) {
     if (this.server) this.server.send(this.socket, JSON.stringify(c))
 }
 
-stunning.prototype.keepAlive = function() {
+stunning.prototype.update = function() {
+    setTimeout(this.update.bind(this), 500)
+
     if (this.server){
-        this.server.send(this.socket, OP_CODES.KEEP_ALIVE)
-        this.server.lastSeen = Date.now()
+        this.sendKeepAlive(this.server)
     }
     
-    if (this.clients){
-        for (var i = 0; i < this.clients.length; i++){
-            clients[i].send(this.socket, OP_CODES.KEEP_ALIVE)
-            clients[i].lastSeen = Date.now()
-        }
+    for (var i = 0; i < this.clients.length; i++){
+        this.sendKeepAlive(clients[i])
     }
-    setTimeout(this.keepAlive, this.keepAliveTimer)
+}
+
+stunning.prototype.sendKeepAlive = function(endpoint) {
+    endpoint.send(this.socket, OP_CODES.KEEP_ALIVE)
+    endpoint.lastSeen = Date.now()
 }
 
 module.exports = stunning
