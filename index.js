@@ -60,8 +60,8 @@ stunning.prototype.registerServer = function(info) {
         console.log('\n\nGOT SERVER\n', this.server.toString())
         this.server.send(this.socket, this.clients ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
         
-        for (var i = clients.length - 1; i >= 0; i--) {
-            clients[i].send(this.socket, JSON.stringify(this.server))
+        for (var i = this.clients.length - 1; i >= 0; i--) {
+            this.clients[i].send(this.socket, JSON.stringify(this.server))
         }
 
     } else {
@@ -70,7 +70,7 @@ stunning.prototype.registerServer = function(info) {
     }
 }
 
-stunning.prototype.addClient = function(info) {
+stunning.prototype.registerClient = function(info) {
          
     /** REGISTER NEW CLIENT */
     var client = new Endpoint(info.address, info.port)    
@@ -78,10 +78,10 @@ stunning.prototype.addClient = function(info) {
     console.log('\n\nGOT CLIENT\n', client.toString())
 
     /** SEND SERVER INFO TO NEW CLIENT **/
-    c.send(this.socket, this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED)    
+    client.send(this.socket, this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED)    
 
     /** SEND NEW CLIENT INFO TO SERVER **/    
-    if (this.server) this.server.send(this.socket, JSON.stringify(c))
+    if (this.server) this.server.send(this.socket, JSON.stringify(client))
 }
 
 stunning.prototype.update = function() {
