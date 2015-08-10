@@ -1,8 +1,13 @@
 var Endpoint = require('./Endpoint'),
     OP_CODES = require('./OpCodes')
 
+module.exports = stunning
+
+/** 
+    Parses config overriding the default if needed
+*/
+
 function stunning(config) {        
-    /** PARSE CONFIG **/
     this.config  = require('./config-validator')(require('./config'), config)
 
     this.socket = require('dgram').createSocket('udp4')    
@@ -11,11 +16,14 @@ function stunning(config) {
     this.clients = []        
 }
 
+/** 
+    RESOLVE DNS AND BINDS 
+*/
+
 stunning.prototype.connect = function() {
 
     console.log('\nSTARTING...\n')
     
-    /** RESOLVE DNS AND BIND **/
     if (this.config.resolveDNS){
         var dns = require('dns')                
 
@@ -28,7 +36,6 @@ stunning.prototype.connect = function() {
         }.bind(this))
     }
 
-    /**  OR JUST BIND **/    
     else this.socket.bind(this.config.port, this.config.address)
 
     this.socket.on('error', function (err){
@@ -55,14 +62,19 @@ stunning.prototype.handleMessage = function(message, request) {
     }
 }
 
+/** 
+    Register a new server and send its info to the clients
+    Sends an error if already registered
+*/
+
 stunning.prototype.registerServer = function(info) {
-    /** REGISTER SERVER **/
+    
     if (!this.server) {
         this.server = new Endpoint(info.address, info.port)
         console.log('\n\nGOT SERVER\n', this.server.toString())
         this.server.send(this.socket, this.clients ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
         
-        for (var i = this.clients.length - 1; i >= 0; i--) {
+        for (var i = 0; i < this.clients.length; ++i) {
             this.clients[i].send(this.socket, JSON.stringify(this.server))
         }
 
@@ -72,19 +84,30 @@ stunning.prototype.registerServer = function(info) {
     }
 }
 
+
+/** 
+    Register a new client and send its info to the server (if any) 
+*/
+
 stunning.prototype.registerClient = function(info) {
          
-    /** REGISTER NEW CLIENT */
     var client = new Endpoint(info.address, info.port)    
     this.clients.push(client)    
     console.log('\n\nGOT CLIENT\n', client.toString())
 
-    /** SEND SERVER INFO TO NEW CLIENT **/
     client.send(this.socket, this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED)    
-
-    /** SEND NEW CLIENT INFO TO SERVER **/    
-    if (this.server) this.server.send(this.socket, JSON.stringify(client))
+    if (this.server) 
+        this.server.send(this.socket, JSON.stringify(client))
 }
+
+
+
+
+
+
+/** 
+    Update loop every 500ms for keepalives
+*/
 
 stunning.prototype.update = function() {
     setTimeout(this.update.bind(this), 500)
@@ -103,4 +126,4 @@ stunning.prototype.sendKeepAlive = function(endpoint) {
     endpoint.lastSeen = Date.now()
 }
 
-module.exports = stunning
+
