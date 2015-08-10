@@ -50,6 +50,8 @@ stunning.prototype.handleMessage = function(message, request) {
         this.registerServer(request)
     } else if (message == OP_CODES.REGISTER_CLIENT) {
         this.registerClient(request)
+    } else {
+        console.log('Got unrecognized message', message, request)
     }
 }
 
