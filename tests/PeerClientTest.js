@@ -38,21 +38,33 @@ function handleStunMessage (msg, req) {
 
 function meetServer(server) {
 
-    console.log("==== MEETING SERVER\n", server)
+    console.log("\n======== MEETING SERVER\n")
     console.log("=== SENDING OPCODE: CLIENT_HANDSHAKE - " + OP_CODES.CLIENT_HANDSHAKE)
+    console.log("=== TO: " + server.address + ":" + server.port + "\n\n")
 
     mainSocket.on('message', validateConnection)
 
     function validateConnection (msg) {
+        msg = msg.toString().trim()
+        
         if (msg == OP_CODES.SERVER_HANDSHAKE){
-            console.log("==== SERVER CONNECTED", server)
-            server.connected = true        
-           mainSocket.removeListener(validateConnection)
-        } else console.log("==== IGNORED MESSAGE" + msg)
+            console.log("==== SERVER CONNECTED ", server)
+            server.connected = true   
+
+           
+        } else console.log("==== IGNORED MESSAGE " + msg)
     }
 
-    while (!server.connected){        
-        server.send(mainSocket, OP_CODES.CLIENT_HANDSHAKE)
+    mainSocket.on('message', validateConnection)
+
+    handShake()
+
+    function handShake() {        
+        console.log("WAITING...")
+        server.send(mainSocket, OP_CODES.SERVER_HANDSHAKE)
+        if (!server.connected)
+            setTimeout(handShake, 500)
+        //else mainSocket.removeListener(validateConnection)
     }
 }
 

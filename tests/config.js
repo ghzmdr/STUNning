@@ -6,9 +6,9 @@ module.exports = {
     resolveDNS: true,
     
     clientPort: 4567,
-    clientAddress: '0.0.0.0',
+    clientAddress: '192.168.1.249',
 
     serverPort: 4568,
-    serverAddress: '0.0.0.0'
+    serverAddress: '192.168.1.249'
 
 }

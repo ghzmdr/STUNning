@@ -5,7 +5,7 @@ var Endpoint = require('../Endpoint.js'),
 var stun = new Endpoint(config.targetAddress, config.targetPort)
 var mainSocket
 
-createSocket(config.serverAddress, config.serverPort, hitStun)
+createSocket(config.clientAddress, config.clientPort, hitStun)
 
 
 function hitStun(socket) {
@@ -17,12 +17,11 @@ function hitStun(socket) {
 function grabExternalIp (m, r) {
     var info = JSON.parse(m)    
 
-    var otherPeer = new Endpoint(info.yourSelf.address, config.clientPort)
+    var otherPeer = new Endpoint(info.yourSelf.address, config.serverPort)    
 
     var grabListener = grabExternalIp
     mainSocket.removeListener('message', grabListener)
     mainSocket.on('message', function(m, r) {console.log("====GOT MESSAGE", m, r)})
-
 
     setInterval(function () {
         otherPeer.send(mainSocket, "HELLO PEER")
@@ -37,7 +36,7 @@ function createSocket(address, port, done) {
     addListenHandler(socket)
     
     var dns = require('dns')                
-    dns.lookup(address, function resolved (err, result) {        
+    dns.lookup(address, function resolved (err, result) {
         if (err) throw err
 
         socket.bind(port, result)

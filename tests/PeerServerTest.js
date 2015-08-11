@@ -52,13 +52,13 @@ function handleStunMessage (msg, req) {
 
 function meetClient(client) {
 
-    console.log("==== MEETING CLIENT\n", client)
+    console.log("\n==== MEETING CLIENT\n")
     console.log("=== SENDING OPCODE: SERVER_HANDSHAKE - " + OP_CODES.SERVER_HANDSHAKE)
+    console.log("=== TO: " + client.address + ":" + client.port + "\n\n")
 
     function validateConnection (msg) {
         msg = msg.toString().trim()
-
-        console.log(OP_CODES.CLIENT_HANDSHAKE == msg, OP_CODES.CLIENT_HANDSHAKE, msg)
+        
         if (msg == OP_CODES.CLIENT_HANDSHAKE){
             console.log("==== CLIENT CONNECTED ", client)
             client.connected = true   
