@@ -1,5 +1,5 @@
 var Endpoint = require('./Endpoint'),
-    OP_CODES = require('./OpCodes')
+    OP_CODES = require('./opcodes.json')
 
 module.exports = stunning
 
