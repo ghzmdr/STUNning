@@ -74,7 +74,7 @@ stunning.prototype.registerServer = function(info) {
         console.log('\n\n[++] ===== GOT SERVER\n', this.server.toString())
         this.server.send(this.socket, this.clients.length > 0 ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
         
-        console.log(this.server ? "[ ] INTRODUCING HIM THE CLIENTS")
+        console.log(this.server ? "[ ] INTRODUCING HIM THE CLIENTS" : OP_CODES.NO_CLIENTS_CONNECTED)
         for (var i = 0; i < this.clients.length; ++i) {
             this.clients[i].send(this.socket, JSON.stringify(this.server))
         }
