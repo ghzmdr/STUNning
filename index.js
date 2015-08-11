@@ -72,7 +72,7 @@ stunning.prototype.registerServer = function(info) {
     if (!this.server) {
         this.server = new Endpoint(info.address, info.port)
         console.log('\n\nGOT SERVER\n', this.server.toString())
-        this.server.send(this.socket, this.clients ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
+        this.server.send(this.socket, this.clients.length > 0 ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
         
         for (var i = 0; i < this.clients.length; ++i) {
             this.clients[i].send(this.socket, JSON.stringify(this.server))
@@ -99,11 +99,6 @@ stunning.prototype.registerClient = function(info) {
     if (this.server) 
         this.server.send(this.socket, JSON.stringify(client))
 }
-
-
-
-
-
 
 /** 
     Update loop every 500ms for keepalives
