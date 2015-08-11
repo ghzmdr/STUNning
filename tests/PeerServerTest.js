@@ -55,22 +55,28 @@ function meetClient(client) {
     console.log("==== MEETING CLIENT\n", client)
     console.log("=== SENDING OPCODE: SERVER_HANDSHAKE - " + OP_CODES.SERVER_HANDSHAKE)
 
-    mainSocket.on('message', validateConnection)
-
     function validateConnection (msg) {
+        msg = msg.toString().trim()
+
+        console.log(OP_CODES.CLIENT_HANDSHAKE == msg, OP_CODES.CLIENT_HANDSHAKE, msg)
         if (msg == OP_CODES.CLIENT_HANDSHAKE){
-            console.log("==== CLIENT CONNECTED", client)
-            client.connected = true        
-           mainSocket.removeListener(validateConnection)
-        } else console.log("==== IGNORED MESSAGE" + msg)
+            console.log("==== CLIENT CONNECTED ", client)
+            client.connected = true   
+
+           
+        } else console.log("==== IGNORED MESSAGE " + msg)
     }
+
+    mainSocket.on('message', validateConnection)
 
     handShake()
 
     function handShake() {        
+        console.log("WAITING...")
         client.send(mainSocket, OP_CODES.SERVER_HANDSHAKE)
         if (!client.connected)
-            process.nextTick(handShake)
+            setTimeout(handShake, 500)
+        //else mainSocket.removeListener(validateConnection)
     }
 }
 
