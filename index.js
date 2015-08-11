@@ -97,8 +97,8 @@ stunning.prototype.registerClient = function(info) {
     this.clients.push(client)    
     console.log('\n\n[++] ===== GOT CLIENT\n', client.toString())
 
-
     var connectionInfo = this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED
+
 
     console.log(this.server ? "\n[ ] INTRODUCING HIM THE SERVER" : "\n[-] " + OP_CODES.SERVER_NOT_CONNECTED)
     client.send(this.socket, connectionInfo)

@@ -1,4 +1,4 @@
-var OP_CODES = require('../OpCodes.js'),
+var OP_CODES = require('../opcodes.json'),
     L = console.log,
     config = require('./config.js')
 

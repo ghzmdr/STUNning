@@ -9,7 +9,7 @@
 
 var Endpoint = require('../Endpoint.js'),
     config = require('./config.js'),
-    OP_CODES = require('../OpCodes.js')
+    OP_CODES = require('../opcodes.json')
 
 var stun = new Endpoint(config.targetAddress, config.targetPort)
 var mainSocket
