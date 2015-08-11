@@ -53,12 +53,13 @@ stunning.prototype.connect = function() {
 }
 
 stunning.prototype.handleMessage = function(message, request) {
+	message = message.toString().trim()
      if (message == OP_CODES.REGISTER_SERVER) {
         this.registerServer(request)
     } else if (message == OP_CODES.REGISTER_CLIENT) {
         this.registerClient(request)
     } else {
-        console.log('Got unrecognized message', message, request)
+        console.log('Got unrecognized message\n', message, "\nSTRING: " + message.toString(), request)
     }
 }
 
@@ -74,7 +75,7 @@ stunning.prototype.registerServer = function(info) {
         console.log('\n\n[++] ===== GOT SERVER\n', this.server.toString())
         this.server.send(this.socket, this.clients.length > 0 ? JSON.stringify(this.clients) : OP_CODES.NO_CLIENTS_CONNECTED)
         
-        console.log(this.server ? "[ ] INTRODUCING HIM THE CLIENTS" : OP_CODES.NO_CLIENTS_CONNECTED)
+        console.log(this.server ? "\n[ ] INTRODUCING HIM THE CLIENTS" : "\n[-] " + OP_CODES.NO_CLIENTS_CONNECTED)
         for (var i = 0; i < this.clients.length; ++i) {
             this.clients[i].send(this.socket, JSON.stringify(this.server))
         }
@@ -99,7 +100,7 @@ stunning.prototype.registerClient = function(info) {
 
     var connectionInfo = this.server ? JSON.stringify(this.server) : OP_CODES.SERVER_NOT_CONNECTED
 
-    console.log(this.server ? "[ ] INTRODUCING HIM THE SERVER: \n" + this.server.toString())
+    console.log(this.server ? "\n[ ] INTRODUCING HIM THE SERVER" : "\n[-] " + OP_CODES.SERVER_NOT_CONNECTED)
     client.send(this.socket, connectionInfo)
     
     if (this.server) 
