@@ -65,8 +65,12 @@ function meetClient(client) {
         } else console.log("==== IGNORED MESSAGE" + msg)
     }
 
-    while (!client.connected){
+    handShake()
+
+    function handShake() {        
         client.send(mainSocket, OP_CODES.SERVER_HANDSHAKE)
+        if (!client.connected)
+            process.nextTick(handShake)
     }
 }
 
