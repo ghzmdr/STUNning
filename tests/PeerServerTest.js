@@ -86,8 +86,8 @@ function createSocket(address, port, done) {
     addErrorHandler(socket)
     addListenHandler(socket)
     
-    socket.bind(port)    
-    /*
+    //socket.bind(port)    
+    
 
     var dns = require('dns')                
     dns.lookup(address, function resolved (err, result) {
@@ -99,7 +99,7 @@ function createSocket(address, port, done) {
         if(done) done(socket)
     })    
 
-    */  
+      
 }
 
 
